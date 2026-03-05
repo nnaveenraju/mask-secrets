@@ -1,0 +1,53 @@
+{
+  "description": "Two-layer sensitive data masking: Layer 1 (PreToolUse) masks secrets before they reach Claude's context. Layer 2 (PostToolUse) audits output for leaks. SessionEnd cleans up temp files.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read|Bash|Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/sensitive-data-mask.py",
+            "timeout": 30,
+            "statusMessage": "Masking sensitive data..."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/secret-scanner.py",
+            "timeout": 30,
+            "statusMessage": "Scanning for secrets..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Read|Bash|Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/sensitive-data-audit.py",
+            "timeout": 15,
+            "statusMessage": "Auditing for sensitive data..."
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rm -rf /tmp/claude-masked-*",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
