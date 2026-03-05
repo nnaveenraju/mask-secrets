@@ -1,0 +1,8 @@
+{
+  "name": "mask-secrets",
+  "description": "Masks secrets, API keys, PII, and sensitive data before they enter Claude's context window. Two-layer defense: PreToolUse prevention + PostToolUse audit.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Naveen Nadimpalli"
+  }
+}

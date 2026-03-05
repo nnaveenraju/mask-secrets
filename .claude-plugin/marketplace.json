@@ -1,0 +1,13 @@
+{
+  "name": "mask-secrets",
+  "owner": {
+    "name": "Naveen Nadimpalli"
+  },
+  "plugins": [
+    {
+      "name": "mask-secrets",
+      "source": ".",
+      "description": "Masks secrets, API keys, PII, and sensitive data before they enter Claude's context window. Two-layer defense: PreToolUse prevention + PostToolUse audit."
+    }
+  ]
+}
